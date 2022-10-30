@@ -1,0 +1,102 @@
+{% extends 'img_trans/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+{% comment %} {% load lookup %} {% endcomment %}
+ 
+{% block content %}
+
+<form action="" method="POST" enctype="multipart/form-data" style="margin: 10px;">
+    <div hidden>{{ form }}</div>
+    {% csrf_token %}
+    <p>＜同時に複数の写真を選択できます＞</p>
+    <br>
+    こんにちは{{ user.username }}
+    <br>
+    <input type="file" class=" btn btn-outline-primary" multiple accept="image/*" id="multiple-files">
+    <label  class="select_btn" for="multiple-files">入力ファイルを選択してください。</label>
+
+    <br>
+
+    <button id="sending" for="btn1" type="submit" class="sending btn btn-primary btn-rounded" onclick="multipleFunction()">アップロード</button>
+  
+  </form>
+</div>
+
+{% comment %} {% for  z,y in zip %}
+{{z}} 
+{{y}} 
+{{z.0}} 
+{{z.1}}
+<br>
+{% endfor %} {% endcomment %}
+
+{% comment %} {% if query.id = '3' %}readonly{% endif %}  {% endcomment %}
+{% comment %} 
+{% for  q in query %}
+{{q}} 
+{% endfor %}  <br> {% endcomment %}
+{% comment %} <br> {% endcomment %}
+{% comment %} {% endfor %}  {% endcomment %}
+<div>
+
+  {% for list,file in zip %}
+
+  <img class="preview-img thumbnail" src="{{file.files.url}}"> 
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal-{{file.pk}}">
+      削除</button>
+      {% include 'img_trans/delete.html' %}
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#processModal-{{file.pk}}">
+      処理</button>
+     {% include 'img_trans/process.html' %}
+
+
+    <img class="preview-img thumbnail" src="{{list.2}}">   
+    <img class="preview-img thumbnail" src="{{list.3}}">   
+    <img class="preview-img thumbnail" src="{{list.4}}">   
+    <img class="preview-img thumbnail" src="{{list.5}}">   
+    <img class="preview-img thumbnail" src="{{list.6}}">   
+
+    <br>
+
+    {% endfor %} 
+
+
+{# ページネイション #}
+<div class="d-flex justify-content-between">
+  <div>
+      {# ページの表示 #}
+      {{ form.number }} / {{ form.paginator.num_pages }} ページ<br>
+  </div>
+  <div class="btn-group">
+      {# 前へ #}
+      {% if form.has_previous %}
+      <a class="btn btn-outline-secondary" href="?page=1">&laquo; 先頭</a>
+      <a class="btn btn-outline-secondary" href="?page={{ form.previous_page_number }}">前へ</a>
+      {% else %}
+      <a class="btn btn-outline-secondary disabled">&laquo; 先頭</a>
+      <a class="btn btn-outline-secondary disabled">前へ</a>
+      {% endif %}
+
+      {# 次へ #}
+      {% if form.has_next %}
+      <a class="btn btn-outline-secondary" href="?page={{ form.next_page_number }}">次へ</a>
+      <a class="btn btn-outline-secondary" href="?page={{ form.paginator.num_pages }}">最後 &raquo;</a>
+      {% else %}
+      <a class="btn btn-outline-secondary disabled">次へ</a>
+      <a class="btn btn-outline-secondary disabled">最後 &raquo;</a>
+      {% endif %}
+  </div>
+</div>
+  <script type='text/javascript'>
+  function multipleFunction() {
+      for (let i = 0; i < document.getElementById('multiple-files').files.length; i++) {
+          const dt = new DataTransfer();
+          dt.items.add(document.getElementById('multiple-files').files[i]);
+          document.getElementById("id_form-%number-files".replace("%number", i)).files = dt.files;
+      }
+  }
+</script>
+
+{% endblock %}

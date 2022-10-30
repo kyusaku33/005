@@ -1,0 +1,96 @@
+/* fontawesome */
+/* @import url(http://weloveiconfonts.com/api/?family=fontawesome); */
+[class*="fontawesome-"]:before {
+  font-family: 'FontAwesome', sans-serif;
+}
+
+/* Simple Reset */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+img.preview-img {
+  width: 256px;
+  /* height: px; */
+  }
+
+a.navbar-brand {
+  /* background-color: #1C7BE4;
+  background-color:#c2d0c1; */
+  color: #cb1354;
+  font: 400 87.5%/1.5em 'Open Sans', sans-serif;
+ }
+
+body {
+    background: #ffffff; 
+    color: #8c8c8c;;
+    /* font: 400 87.5%/1.5em 'Open Sans', sans-serif; */
+    /* background-image: url("/static/images/top.jpg") ; */
+    background-repeat:  no-repeat; 
+    background-position:center center;
+    width:100%;                                  
+    height:100%;  
+    opacity:0.97;
+  }
+
+  .explain {
+    position: relative; /* 今の位置を基準 */
+    top: 70px; /* 上から10px */
+    border: 1px solid;
+    border-color: #f7f9f7;
+    display: flex;
+    flex-flow: column;
+    justify-content:  flex-start;
+    /* font-family: 'Berkshire Swash', cursive; */
+    background: #ffffff; 
+    color: #111111;;
+    margin: 0em auto;
+
+    padding: 1em 1em 1em 1em;
+    width: 670px;
+    height: 20px;
+    max-height: 270px;
+  }
+  .form-wrapper {
+    position: relative; /* 今の位置を基準 */
+    top: 70px; /* 上から10px */
+    border: 1px solid;
+    border-color: #cbcccb;
+    display: flex;
+    flex-flow: column;
+    justify-content:  flex-start;
+    /* font-family: 'Berkshire Swash', cursive; */
+    background: #ffffff; 
+    color: #111111;;
+    margin: 0em auto;
+
+    padding: 1em 1em 1em 1em;
+    width: 670px;
+    height: 510px;
+    max-height: 570px;
+  }
+
+.container-input{
+  margin: 1em ;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+button[type="sending"] {
+  display: none;
+}
+
+label.select_btn{
+  display: inline-block;
+  background: #0d6efd; 
+  color: #ffffff;;
+  border-radius: 5px;
+  text-align: center;
+  text-decoration: none;
+  /* border: solid 1px #ccc; */
+  transition: 0.25s;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-size: 16px;
+  margin: 4px;
+}

@@ -1,0 +1,23 @@
+<div class="modal fade" tabindex="-1" role="dialog" id="deleteModal-{{file.pk}}">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title">データの削除</h5>
+
+          </div>
+          <div class="modal-body"> <p>削除すると元に戻すことはできません。よろしいでしょうか？</p> </div>
+
+          <div class="alert alert-light" role="alert">
+            {{file.title }} 
+        </div>
+          <div class="modal-footer">
+          {% comment %} <form method="POST" action="{% url 'myapp1:matrix_confirm_delete' object %}">{% csrf_token %} {% endcomment %}
+          <form method="POST" action="{% url 'img_trans:delete' file.pk  %}" >{% csrf_token %}
+            {% comment %} action="{% url 'matrix_confirm_delete' product.pk  %}"  {% endcomment %}
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
+              <button type="submit" class="btn btn-danger">削除</button>
+          </div>
+          </form>
+      </div>
+  </div>
+</div>
