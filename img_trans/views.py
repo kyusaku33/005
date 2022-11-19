@@ -10,8 +10,17 @@ from .models import ImageUpload#,Process
 import cv2
 import sqlite3
 import os
+import json
+from django.contrib.auth.decorators import login_required
+import time
+from scipy.optimize import fmin_l_bfgs_b
+from img_trans.torch.neural_style.neural_style import main
+
 
 # Create your views here.
+
+#login_required #ログインしてないとログインページにリダイレクト
+
 def top(request):
     form = "temp"
     context = {'form':form,  }
@@ -24,28 +33,41 @@ def mypage(request):
     formset = UploadModelFormSet(request.POST or None, files=request.FILES or None, queryset=ImageUpload.objects.none())
     
     if request.method == 'POST': #画像が選択され，送信されたとき
-        formset.save() #データベースに保存
+        if formset.is_valid():
 
+            #アップロードしたレコードにメールアドレスを入力
+            list_pk=[]
+            for image_temp in  ImageUpload.objects.all():
+                list_pk.append(image_temp.pk)
+            formset.save()
+            list_pk2=[]
+            for image_temp in  ImageUpload.objects.all():
+                list_pk2.append(image_temp.pk)
+
+            diff_list = set(list_pk) ^ set(list_pk2)
+ 
+            con = sqlite3.connect(str(settings.BASE_DIR)+ '/db.sqlite3')  
+            c = con.cursor()
+            for diff in  diff_list :
+                c.execute('UPDATE img_trans_imageupload SET "Username_id" ="{}" WHERE id = "{}";'.format(request.user.email , diff))
+            con.commit()
+            con.close()
+
+
+    #queryset = ImageUpload.objects.filter(Username_id = {request.user.email})#自分のファイルのみ抽出
+    queryset_temp =[] 
     queryset = ImageUpload.objects.all()
-    paginator = Paginator( queryset, EXTRA )
+    
+    for query in queryset:
+        if query.Username_id == request.user.email:
+             queryset_temp.append(query)
+    print(queryset_temp)
+    paginator = Paginator( queryset_temp, EXTRA )
     p = request.GET.get('page')
     files = paginator.get_page(p)
 
-    con = sqlite3.connect(str(settings.BASE_DIR)+ '/db.sqlite3')  
-    c = con.cursor()
-    c.execute("select * from img_trans_imageupload")
-    i = 0
-    temp =c.fetchall()
-
-    #c.execute("alter table img_trans_imageupload add column process01") #最初だけ
-    #c.execute('UPDATE img_trans_imageupload SET process01 ="{}" WHERE id = "{}";'.format(output_path_relative , pk))
-    con.commit()
-    con.close()
-
     context = {
-        'zip':  zip(temp, files),
-        # 'queryset': temp,
-        # 'files': files,
+        'files':  files,
         'form': formset,
         'number_list': list(range(EXTRA)),
         'total_number': EXTRA,
@@ -53,64 +75,41 @@ def mypage(request):
 
     return render(request, 'img_trans/mypage.html',context)
 
-
 def process(request,pk):
- 
+    
     context = {'file': object}
     if request.method == 'POST':
         output_dir =  str(settings.BASE_DIR) + str(settings.MEDIA_URL)+"images/{:04}".format(pk)
         if not os.path.exists(output_dir):    # ディレクトリが存在しない場合、ディレクトリを作成する
             os.makedirs(output_dir)
 
-        #predicted01, rate01 = ImageUpload.objects.get(pk=pk).process01(pk)  
-        predicted, rate = ImageUpload.objects.get(pk=pk).process(pk) 
+        image = ImageUpload.objects.get(pk=pk).process(pk) 
+        main("eval",pk,"candy","process06")
+        main("eval",pk,"mosaic","process07")
+        main("eval",pk,"rain_princess","process08")
+        main("eval",pk,"udnie","process09")
+
+        # for i in range(10):
+        #     print('Start of iteration', i)
+        #     start_time = time.time()
+        #     x, min_val, info = fmin_l_bfgs_b(ImageUpload.objects.get(pk=pk).evaluator.loss, x.flatten(),fprime=ImageUpload.objects.get(pk=pk).evaluator.grads, maxfun=20)
+        #     print('Current loss value:', min_val)
+        #     # save current generated image
+        #     img = ImageUpload.objects.get(pk=pk).deprocess_image(x.copy())
+        #     fname = ImageUpload.objects.get(pk=pk).result_prefix + '_at_iteration_%d.png' % i
+        #     ImageUpload.objects.get(pk=pk).save_img(fname, img)
+        #     end_time = time.time()
+        #     print('Image saved as', fname)
+        #     print('Iteration %d completed in %ds' % (i, end_time - start_time))
+
+
+
+
         return redirect('img_trans:mypage')
     else:
         return render(request, 'img_trans/process.html', context)
 
-    # if not request.method == 'POST':
-    #     return redirect('img_trans:mypage')
-    
-    # form = SingleUploadModelForm(request.POST, request.FILES) #フォーム呼び出し
-    # if not form.is_valid():
-    #     raise ValueError('Form is illegal.')
-    # print(form.cleaned_data['image'])
-
-    # pict = Process(image=form.cleaned_data['image']) #モデル呼び出し
-    # print(pict)
-    # if 'process01' in request.POST:
-    #     # ボタン1がクリックされた場合の処理
-    #     predicted, rate = pict.process01()
-    #     template = loader.get_template('img_trans:mypage')
-    #     context = {
-    #     'form2': form ,
-    #     'pict_name': pict.image.name,
-    #     'pict_data': pict.image_src(),
-    #     'predicted': predicted,
-    #     'rate': rate,
-    #     }
-    #     return HttpResponse(template.render(context, request))
-
-    # elif 'process02' in request.POST:
-    #     # ボタン2がクリックされた場合の処理
-    #     image_org,image,output_path = pict.rectangle()
-    #     template = loader.get_template('img_trans:mypage')
-    #     #print("---------------",output_path )
-
-    #     img_2 =pict.image_src()
-
-    #     context = {
-    #         'pict_name': pict.image.name,
-    #         #'pict_data': pict.image_src(), #image_org,W
-    #         'pict_out_path': output_path, #image_org,
-    #     }
-
-    #     return HttpResponse(template.render(context, request))
-    # queryset = ImageUpload.objects.all()
-    # context = {
-    #     'queryset': queryset,
-    # }
-    # return render(request, 'img_trans/mypage.html',context)
+  
 
 def delete(request,pk):
     object = ImageUpload.objects.get(pk=pk)

@@ -11,58 +11,41 @@
     <div hidden>{{ form }}</div>
     {% csrf_token %}
     <p>＜同時に複数の写真を選択できます＞</p>
-    <br>
-    こんにちは{{ user.username }}
+    
+    {% comment %} こんにちは{{ user.username }} {% endcomment %}
+  
     <br>
     <input type="file" class=" btn btn-outline-primary" multiple accept="image/*" id="multiple-files">
-    <label  class="select_btn" for="multiple-files">入力ファイルを選択してください。</label>
-
-    <br>
-
+    <label class="sending btn btn-primary btn-rounded" for="multiple-files">入力ファイルを選択してください。</label>
     <button id="sending" for="btn1" type="submit" class="sending btn btn-primary btn-rounded" onclick="multipleFunction()">アップロード</button>
-  
   </form>
 </div>
 
-{% comment %} {% for  z,y in zip %}
-{{z}} 
-{{y}} 
-{{z.0}} 
-{{z.1}}
-<br>
-{% endfor %} {% endcomment %}
+<div class="image_pk">
 
-{% comment %} {% if query.id = '3' %}readonly{% endif %}  {% endcomment %}
-{% comment %} 
-{% for  q in query %}
-{{q}} 
-{% endfor %}  <br> {% endcomment %}
-{% comment %} <br> {% endcomment %}
-{% comment %} {% endfor %}  {% endcomment %}
-<div>
 
-  {% for list,file in zip %}
-
-  <img class="preview-img thumbnail" src="{{file.files.url}}"> 
-    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal-{{file.pk}}">
-      削除</button>
+  {% for file in files %}
+    <div class="image_pk02">
+    <img class="preview-img thumbnail" src="{{file.files.url}}"> 
+    <div class="btm01">
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal-{{file.pk}}">削除</button>
       {% include 'img_trans/delete.html' %}
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#processModal-{{file.pk}}">
-      処理</button>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#processModal-{{file.pk}}">処理</button>
      {% include 'img_trans/process.html' %}
+    </div>
 
-
-    <img class="preview-img thumbnail" src="{{list.2}}">   
-    <img class="preview-img thumbnail" src="{{list.3}}">   
-    <img class="preview-img thumbnail" src="{{list.4}}">   
-    <img class="preview-img thumbnail" src="{{list.5}}">   
-    <img class="preview-img thumbnail" src="{{list.6}}">   
-
-    <br>
-
-    {% endfor %} 
-
-
+    <img class="preview-img thumbnail" src="{{file.process01}}">
+    <img class="preview-img thumbnail" src="{{file.process02}}">
+    <img class="preview-img thumbnail" src="{{file.process03}}">
+    <img class="preview-img thumbnail" src="{{file.process04}}">
+    <img class="preview-img thumbnail" src="{{file.process05}}">
+    <img class="preview-img thumbnail" src="{{file.process06}}">
+    <img class="preview-img thumbnail" src="{{file.process07}}">
+    <img class="preview-img thumbnail" src="{{file.process08}}">
+    <img class="preview-img thumbnail" src="{{file.process09}}">
+  </div>
+  {% endfor %} 
+</div>
 {# ページネイション #}
 <div class="d-flex justify-content-between">
   <div>
@@ -88,7 +71,7 @@
       <a class="btn btn-outline-secondary disabled">最後 &raquo;</a>
       {% endif %}
   </div>
-</div>
+
   <script type='text/javascript'>
   function multipleFunction() {
       for (let i = 0; i < document.getElementById('multiple-files').files.length; i++) {

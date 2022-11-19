@@ -1,0 +1,95 @@
+{% extends "account/base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+
+{% load i18n %}
+{% comment %} {% load account socialaccount %} {% endcomment %}
+
+{% comment %} {% block head_title %}{% trans "Sign In" %}{% endblock %} {% endcomment %}
+
+{% block content %}
+
+
+{% comment %} <h1>{% trans "Sign In" %}</h1> {% endcomment %}
+
+{% comment %} {% get_providers as socialaccount_providers %} {% encomment %}
+
+{% comment %} {% if socialaccount_providers %}
+<p>{% blocktrans with site.name as site_name %}Please sign in with one
+of your existing third party accounts. Or, <a href="{{ signup_url }}">sign up</a>
+for a {{ site_name }} account and sign in below:{% endblocktrans %}</p>
+
+<div class="socialaccount_ballot">
+
+  <ul class="socialaccount_providers">
+    {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+  </ul>
+
+  <div class="login-or">{% trans 'or' %}</div>
+
+</div>
+
+{% include "socialaccount/snippets/login_extra.html" %}
+
+{% else %} {% endcomment %}
+
+<div class="form-wrapper">
+  {% comment %} <h1>Sign In</h1> {% endcomment %}
+  {% comment %} <div class="form-title">Login</div> {% endcomment %}
+  <h1>{% trans "Login" %}</h1>
+  <form class="login" method="POST" action="{% url 'account_login' %}">
+    {% csrf_token %}
+    test
+    {{temp2}}
+    メールアドレスを入力 
+    <div class="container-input" >{{ form.login |add_class:"form-box" }}</div>
+    
+    パスワードを入力 
+    <div class="container-input" >{{ form.password }}</div>
+
+    {% comment %} <div class="container-input form-text">ログインしたままにする{{ form.remember|add_class:"form-box"  }}</div> {% endcomment %}
+   
+    <label>
+      <input type="checkbox" value="remember-me" /> remember
+    </label> 
+    {% comment %} {{ form.remember.value }}
+    {{ form.remember.value }}
+     {% endcomment %}
+    {% comment %} {{ form.remember }} {% endcomment %}
+  
+    {% if redirect_field_value %}
+   <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+   {% endif %}
+   <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+    
+    
+    <div class="container-input" ><a class="button secondaryAction" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a></div>
+    <div class="container-input"><button class="btn btn-primary" type="submit">{% trans "Sign In" %}</button></div>
+
+
+    {% comment %} {{ form.as_ul }}
+    {{ form.as_table }} {% endcomment %}
+
+    {% comment %} <div class="form-item">
+      <label for="email"></label>
+      <input type="email" name="email" required="required" placeholder="Email Address"></input>
+    </div>
+    <div class="form-item">
+      <label for="password"></label>
+      <input type="password" name="password" required="required" placeholder="Password"></input>
+    </div>
+    <div class="button-panel">
+      <input type="submit" class="button" title="Sign In" value="Sign In"></input>
+    </div> {% endcomment %}
+  </form>
+
+</div>
+
+
+{% comment %} <p>{% blocktrans %}If you have not created an account yet, then please
+<a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}</p> {% endcomment %}
+{% comment %} {% endif %} {% endcomment %}
+
+{% endblock %}

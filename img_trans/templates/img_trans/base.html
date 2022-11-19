@@ -23,9 +23,9 @@
           {% if user.is_authenticated %}
           {% comment %} <a class="navbar-brand" href="{% url 'account_email' %}">Change E-mail</a> {% endcomment %}
           <a class="navbar-brand" href="{% url 'account_logout' %}">Sign Out</a>
-          <a class="navbar-brand" href="{% url 'account_change_password' %}">change_password</a>
-          <a class="navbar-brand" href="{% url 'img_trans:mypage' %}">mypage</a>
-          <a >{{ user.username }}</a>       
+          <a class="navbar-brand" href="{% url 'account_change_password' %}">Change_password</a>
+          <a class="navbar-brand" href="{% url 'img_trans:mypage' %}">Mypage</a>
+          <a class="navbar-brand" > ようこそ {{ user.username }}</a>       
 
 
           {% else %}

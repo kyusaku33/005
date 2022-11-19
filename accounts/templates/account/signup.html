@@ -14,7 +14,7 @@
   <h1>{% trans "Sign Up" %}</h1>
   <form class="login" method="POST" action="{% url 'account_signup' %}">
     {% csrf_token %}
-    チェック6
+   
 
     メールアドレスを入力 
     <div class="container-input" >{{ form.email |add_class:"form-box" }}</div>

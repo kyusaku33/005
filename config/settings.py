@@ -51,8 +51,8 @@ INSTALLED_APPS = [
     'img_trans', # 追加
 ]
 
-SESSION_ENGINE = 'django.contrib.sessions.backends.cache'# 追加
-#SESSION_ENGINE = 'user_sessions.backends.db'# 追加
+#SESSION_ENGINE = 'django.contrib.sessions.backends.cache'# 追加
+#ESSION_ENGINE = 'user_sessions.backends.db'# 追加
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -170,7 +170,7 @@ ACCOUNT_EMAIL_REQUIRED = True
 
 # ログイン/ログアウト後の遷移先を設定
 #LOGIN_URL = 'img_trans:top'
-LOGIN_REDIRECT_URL = 'img_trans:top'
+LOGIN_REDIRECT_URL = '/'
 ACCOUNT_LOGOUT_REDIRECT_URL = 'account_login'
 
 # ログアウトリンクのクリック一発でログアウトする設定
@@ -194,25 +194,25 @@ ACCOUNT_FORMS = {
     'signup': 'accounts.forms.CustomSignupForm',
     'login': 'accounts.forms.CustomLoginForm',
     'reset_password': 'accounts.forms.CustomResetPasswordForm',
-    'reset_password_from_key': 'accounts.forms.CustomResetPasswordKeyForm',
+    'reset_password_from_keyFalse': 'accounts.forms.CustomResetPasswordKeyForm',
     'change_password': 'accounts.forms.CustomChangePasswordForm',
     'add_email': 'accounts.forms.CustomAddEmailForm',
     'set_password': 'accounts.forms.CustomSetPasswordForm',
 }
 
-
-
+ACCOUNT_SESSION_REMEMBER = True
+#SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 # AUTH_USER_MODEL = 'accounts.User'
 # #AUTH_USER_MODEL = 'accounts.CustomUser'
 
 
-# # ACCOUNT_EMAIL_REQUIRED = True # Eメール必須
-# # ACCOUNT_USERNAME_REQUIRED = True # ユーザー名必須
-# # ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True # パスワード２回入力
-# # ACCOUNT_SESSION_REMEMBER = True
-# # ACCOUNT_AUTHENTICATION_METHOD = 'email' # Eメールで認証を行う
-# # ACCOUNT_UNIQUE_EMAIL = True # 一意なEメール
-# # ACCOUNT_EMAIL_VERIFICATION = 'mandatory' # Eメール送信
+# ACCOUNT_EMAIL_REQUIRED = True # Eメール必須
+# ACCOUNT_USERNAME_REQUIRED = True # ユーザー名必須
+# ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True # パスワード２回入力
+# ACCOUNT_SESSION_REMEMBER = True
+# ACCOUNT_AUTHENTICATION_METHOD = 'email' # Eメールで認証を行う
+# ACCOUNT_UNIQUE_EMAIL = True # 一意なEメール
+# ACCOUNT_EMAIL_VERIFICATION = 'mandatory' # Eメール送信
 
 
 

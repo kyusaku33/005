@@ -7,6 +7,74 @@
 /* Simple Reset */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
+.image_pk {
+  position: relative; /* 今の位置を基準 */
+
+  display: flex;
+  flex-flow: column;
+  justify-content:  flex-start;
+  margin: 1em 2em ;
+  padding: 1em 1em 1em 1em;
+  gap: 10px 4px;
+
+  /*top: 70px; 
+  border: 1px solid;
+  border-color: #f7f9f7;
+  font-family: 'Berkshire Swash', cursive; 
+  background: #ffffff; 
+  color: #111111;;
+  width: 670px;
+  height: 20px;
+  max-height: 270px; */
+  }
+
+.image_pk02 {
+    position: relative; /* 今の位置を基準 */
+    display: flex;
+    flex-flow: row;
+    flex-wrap:wrap;
+    justify-content:  flex-start;
+    /* margin: 1em 1em ;*/
+    padding: 1em 1em 1em 2em; 
+    gap: 5px 5px;
+    border: 0.5px solid;
+    border-color: #c5cfc5;
+    border-radius: 8px;
+    /*top: 70px; 
+    border: 1px solid;
+    border-color: #f7f9f7;
+    font-family: 'Berkshire Swash', cursive; 
+    background: #ffffff; 
+    color: #111111;;
+    width: 670px;
+    height: 20px;
+    max-height: 270px; */
+    }
+
+  .btm01 {
+      position: relative; /* 今の位置を基準 */
+      display: flex;
+      flex-flow: column;
+      flex-wrap:wrap;
+      justify-content:  flex-start;
+      /* margin: 1em 1em ;*/
+      padding: 0em 1em 1em 1em; 
+      gap: 5px 5px;
+      /*border: 0.5px solid;
+      border-color: #c5cfc5;
+      border-radius: 8px;
+      top: 70px; 
+      border: 1px solid;
+      border-color: #f7f9f7;
+      font-family: 'Berkshire Swash', cursive; 
+      background: #ffffff; 
+      color: #111111;;
+      width: 670px;
+      height: 20px;
+      max-height: 270px; */
+      }
+
+
 img.preview-img {
   width: 256px;
   /* height: px; */
@@ -31,7 +99,7 @@ body {
     opacity:0.97;
   }
 
-  .explain {
+.explain {
     position: relative; /* 今の位置を基準 */
     top: 70px; /* 上から10px */
     border: 1px solid;
@@ -43,13 +111,13 @@ body {
     background: #ffffff; 
     color: #111111;;
     margin: 0em auto;
-
     padding: 1em 1em 1em 1em;
     width: 670px;
     height: 20px;
     max-height: 270px;
   }
-  .form-wrapper {
+
+.form-wrapper {
     position: relative; /* 今の位置を基準 */
     top: 70px; /* 上から10px */
     border: 1px solid;
@@ -61,7 +129,6 @@ body {
     background: #ffffff; 
     color: #111111;;
     margin: 0em auto;
-
     padding: 1em 1em 1em 1em;
     width: 670px;
     height: 510px;

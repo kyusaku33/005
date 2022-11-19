@@ -26,5 +26,6 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')), # 追加
    # path('', include('user_sessions.urls', 'user_sessions')),  #追加
     path('', include('img_trans.urls')),
+    path('', include('accounts.urls'))
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
