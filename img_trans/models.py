@@ -8,6 +8,8 @@ from django.conf import settings
 import cv2,copy
 import sqlite3
 from django.contrib.auth.models import User
+from img_trans.image import changedH
+
 from img_trans.torch.neural_style.utils import load_image,load_image_style,save_image,gram_matrix,normalize_batch
 #from .model_cnn import preprocess_image
 #from .model_fast_style import main
@@ -58,21 +60,30 @@ class ImageUpload(models.Model):
         # image = Image.open(img_bin)
         # image = np.array(image, dtype=np.uint8)
         #モノクロの場合カラーへ
-        image = load_image_style(self.files, scale=1.0, max_style_size=1024)
-        image = np.array(image, dtype=np.uint8)
-        if len(image.shape) == 2:
-            image = cv2.cvtColor(image, cv2.COLOR_GRAY2RGBA)
-        #画像サイズ調整
-
+        #image2 = Image.open(self.files)
         
-        w, h = image.shape[:2]
-        height = round((h/ w) * 1024 )
-        print(h,w,height)
+        #image = load_image_style(self.files, scale=1.0, max_style_size=1024)
+        content_image = str(settings.BASE_DIR) + str(settings.MEDIA_URL)  + self.files.name
 
-        if w > 1024:
-            image = cv2.resize(image, dsize=(height, 1024))
-            output_dir =  str(settings.BASE_DIR) + str(settings.MEDIA_URL)+"images/{:04}".format(pk)
-            cv2.imwrite(output_dir + "/"  +"2.jpg" , image) 
+        #image = cv2.imread( content_image)
+        image = load_image_style(content_image, scale=1.0, max_style_size=1024)
+        output_dir =  str(settings.BASE_DIR) + str(settings.MEDIA_URL)+"images/{:04}".format(pk)
+        
+        #image2.save(output_dir + "/"  +"21.jpg")
+        image = np.array(image, dtype=np.uint8)
+
+        cv2.imwrite(output_dir + "/"  +"22.jpg" , image) 
+        
+        if len(image.shape) == 2:
+            image = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB)
+        #画像サイズ調整
+        # w, h = image.shape[:2]
+        # print(h,w)
+        # height = round((h/ w) * 1024 )
+        # if w > 1024:
+        #     image = cv2.resize(image, dsize=(1024, height))
+        #     output_dir =  str(settings.BASE_DIR) + str(settings.MEDIA_URL)+"images/{:04}".format(pk)
+        #     cv2.imwrite(output_dir + "/"  +"22.jpg" , image) 
         
         ##加工処理
         # image_canny = copy.deepcopy(image)
@@ -80,13 +91,12 @@ class ImageUpload(models.Model):
         # img_hsv1 = copy.deepcopy(image)
         # img_hsv2 = copy.deepcopy(image)
         # img_denoising = copy.deepcopy(image)
-        img_hsv1 = image
-        img_hsv2 = image
         image_canny = cv2.Canny(image, 20, 150)
         image_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        #img_hsv1[:, :, 0] = np.where(img_hsv1 [:, :, 0]>300, img_hsv1 [:, :, 0] - 180, img_hsv1[:, :, 0])
-        #img_hsv2[:, :, 0] = np.where(img_hsv2[:, :, 0]<20, img_hsv2[:, :, 0] + 40, img_hsv2[:, :, 0])
-        img_denoising  = cv2.fastNlMeansDenoising(image , h=20)
+        img_hsv1 = changedH(image, 85)
+        img_hsv2 = changedH(image, -85)
+
+        img_denoising  = cv2.fastNlMeansDenoising(image_gray , h=20)
 
         ##データベース登録と保存
         params =["process01","process02","process03","process04","process05",]
