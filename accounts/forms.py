@@ -22,6 +22,7 @@ class CustomLoginForm(LoginForm):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
+        # self.fields['email'].label = '任意の文字'
 
 #allauthのパスワードリセットのメールフォーム上書き
 class CustomResetPasswordForm(ResetPasswordForm):
