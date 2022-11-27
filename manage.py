@@ -1,3 +1,4 @@
+#!/home/ec2-user/.local/share/virtualenvs/dev-q2Vsyppp/bin python3
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
