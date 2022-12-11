@@ -28,6 +28,7 @@ os.environ["CUDA_VISIBLE_DEVICES"]="-1"
 class ImageUpload(models.Model):
     files = models.ImageField( upload_to="images", null=True, blank=True, default='')
     Username = models.ForeignKey(User,on_delete=models.CASCADE, null=True,blank=True)
+    email = models.CharField(  verbose_name='', blank=True, null=True,max_length=50,default='',)
     process01 = models.CharField(verbose_name="process01",blank=True,null=True,default='',max_length=2000)
     process02 = models.CharField(verbose_name="process02",blank=True,null=True,default='',max_length=2000)
     process03 = models.CharField(verbose_name="process03",blank=True,null=True,default='',max_length=2000)
@@ -86,11 +87,7 @@ class ImageUpload(models.Model):
         #     cv2.imwrite(output_dir + "/"  +"22.jpg" , image) 
         
         ##加工処理
-        # image_canny = copy.deepcopy(image)
-        # image_gray = copy.deepcopy(image)
-        # img_hsv1 = copy.deepcopy(image)
-        # img_hsv2 = copy.deepcopy(image)
-        # img_denoising = copy.deepcopy(image)
+
         image_canny = cv2.Canny(image, 20, 150)
         image_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         img_hsv1 = changedH(image, 85)
@@ -99,20 +96,41 @@ class ImageUpload(models.Model):
         img_denoising  = cv2.fastNlMeansDenoising(image_gray , h=20)
 
         ##データベース登録と保存
-        params =["process01","process02","process03","process04","process05",]
+        #params =[self.process01,self.process02,self.process03,self.process04,self.process05]
+        params =["process01","process02","process03","process04","process05"]
+
         img_paths =[image_canny,image_gray,img_hsv1,img_hsv2,img_denoising ]
-        #img_paths =[image_canny,image_canny,image_canny,image_canny,image_canny ]
+
         
         output_dir =  str(settings.BASE_DIR) + str(settings.MEDIA_URL)+"images/{:04}".format(pk)
-        con = sqlite3.connect(str(settings.BASE_DIR)+ '/db.sqlite3')  
-        c = con.cursor()
 
-        for param,img_path in zip(params, img_paths):
-            output_path_relative =  str(settings.MEDIA_URL)+"images/{:04}".format(pk)+ "/"+ param +".jpg"
-            cv2.imwrite(output_dir + "/" + param +".jpg" , img_path)  
-            c.execute('UPDATE img_trans_imageupload SET "{}" ="{}" WHERE id = "{}";'.format(param,output_path_relative , pk))
-        con.commit()
-        con.close()
+        db = ImageUpload.objects.get(pk=pk)
+        # for param,img_path in zip(params, img_paths):
+        #     output_path_relative =  str(settings.MEDIA_URL)+"images/{:04}".format(pk)+ "/"+ "{}".format(param) +".jpg"
+        #     print(output_path_relative)
+        #     db.param = output_path_relative
+        #     cv2.imwrite(output_dir + "/" + "{}".format(param) +".jpg" , img_path)  
+        output_path_relative =  str(settings.MEDIA_URL)+"images/{:04}".format(pk)+ "/"+ "process01.jpg"
+        db.process01 = output_path_relative
+        cv2.imwrite(output_dir + "/" + "process01.jpg" , image_canny)
+
+        output_path_relative =  str(settings.MEDIA_URL)+"images/{:04}".format(pk)+ "/"+ "process02.jpg"
+        db.process02 = output_path_relative
+        cv2.imwrite(output_dir + "/" + "process02.jpg" , image_gray)
+
+        output_path_relative =  str(settings.MEDIA_URL)+"images/{:04}".format(pk)+ "/"+ "process03.jpg"
+        db.process03 = output_path_relative
+        cv2.imwrite(output_dir + "/" + "process03.jpg" , img_hsv1)
+
+        output_path_relative =  str(settings.MEDIA_URL)+"images/{:04}".format(pk)+ "/"+ "process04.jpg"
+        db.process04 = output_path_relative
+        cv2.imwrite(output_dir + "/" + "process04.jpg" , img_hsv2)
+
+        output_path_relative =  str(settings.MEDIA_URL)+"images/{:04}".format(pk)+ "/"+ "process05.jpg"
+        db.process05 = output_path_relative
+        cv2.imwrite(output_dir + "/" + "process05.jpg" , img_denoising)
+
+        db.save()
         return   image
 
     # def process02(self,pk):# 色変換

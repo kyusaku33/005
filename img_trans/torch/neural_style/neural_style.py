@@ -19,7 +19,7 @@ from .utils import load_image,load_image_style,save_image,gram_matrix,normalize_
 
 from .transformer_net import TransformerNet
 from .vgg import Vgg16
-
+from img_trans.models import ImageUpload
 
 def check_paths(save_model_dir,checkpoint_model_dir):
     try:
@@ -177,12 +177,15 @@ def stylize_onnx_caffe2(content_image, args):
     return torch.from_numpy(c2_out)
 
 
-def main(subcommand,pk,style,param):
+def main(subcommand,pk,style,param,input_path):
 
-    con = sqlite3.connect(str(settings.BASE_DIR)+ '/db.sqlite3')  
-    c = con.cursor()
-    c.execute('SELECT * from img_trans_imageupload  WHERE id = "{}";'.format(pk))
-    db = c.fetchone() 
+    # con = sqlite3.connect(str(settings.BASE_DIR)+ '/db.sqlite3')  
+    # c = con.cursor()
+    # c.execute('SELECT * from img_trans_imageupload  WHERE id = "{}";'.format(pk))
+    # db = c.fetchone() 
+
+    db = ImageUpload.objects.get(pk=pk)
+    #path = db.filse
     #con.commit()
     #con.close() 
 
@@ -207,7 +210,7 @@ def main(subcommand,pk,style,param):
     #output_image = str(settings.BASE_DIR) + str(settings.STATIC_URL) + "style_image/output-images/test2.jpg"
     output_dir =  str(settings.BASE_DIR) + str(settings.MEDIA_URL)+"images/{:04}".format(pk)
     output_image = output_dir + "/{}.jpg".format(param)
-    content_image = str(settings.BASE_DIR) + str(settings.MEDIA_URL)  + str(db[1])
+    content_image = str(settings.BASE_DIR) + str(settings.MEDIA_URL)  + str(input_path)
 
     model = str(settings.BASE_DIR) + str(settings.STATIC_URL) + "style_image/saved_models/"+style+".pth"
     export_onnx = ""  
@@ -230,11 +233,11 @@ def main(subcommand,pk,style,param):
  
         stylize(content_image,content_scale,output_image,model,cuda,export_onnx,max_style_size)
 
-    output_path_relative =  str(settings.MEDIA_URL)+"images/{:04}".format(pk)+ "/"+ param +".jpg"
- 
-    c.execute('UPDATE img_trans_imageupload SET "{}" ="{}" WHERE id = "{}";'.format(param,output_path_relative , pk))
-    con.commit()
-    con.close()
+
+    # c.execute('UPDATE img_trans_imageupload SET "{}" ="{}" WHERE id = "{}";'.format(param,output_path_relative , pk))
+    # con.commit()
+    # con.close()
+
 
 
 # if __name__ == "__main__":

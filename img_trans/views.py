@@ -15,11 +15,22 @@ from django.contrib.auth.decorators import login_required
 import time
 from scipy.optimize import fmin_l_bfgs_b
 from img_trans.torch.neural_style.neural_style import main
-
+from django.forms import BaseModelFormSet
 
 # Create your views here.
 
 #login_required #ログインしてないとログインページにリダイレクト
+
+# class MyModelFormSet(BaseModelFormSet):
+#     def clean(self):
+#         super().clean()
+
+#         for form in self.forms:
+#             name = form.cleaned_data['name'].upper()
+#             form.cleaned_data['Username'] = name
+#             # update the instance value.
+#             form.instance.name = name
+
 
 def top(request):
     form = "temp"
@@ -28,30 +39,19 @@ def top(request):
     return render(request, 'img_trans/top.html',context)
 
 def mypage(request):
-    EXTRA = 10
+    EXTRA = 1
     UploadModelFormSet = forms.modelformset_factory(ImageUpload, form=SingleUploadModelForm,extra=EXTRA)
     formset = UploadModelFormSet(request.POST or None, files=request.FILES or None, queryset=ImageUpload.objects.none())
     
     if request.method == 'POST': #画像が選択され，送信されたとき
         if formset.is_valid():
-
-            #アップロードしたレコードにメールアドレスを入力
-            list_pk=[]
-            for image_temp in  ImageUpload.objects.all():
-                list_pk.append(image_temp.pk)
+            for data in formset:
+                 test = data.save(commit=False)
+                 test.email = request.user.email 
+                 test.save()
+               
             formset.save()
-            list_pk2=[]
-            for image_temp in  ImageUpload.objects.all():
-                list_pk2.append(image_temp.pk)
-
-            diff_list = set(list_pk) ^ set(list_pk2)
- 
-            con = sqlite3.connect(str(settings.BASE_DIR)+ '/db.sqlite3')  
-            c = con.cursor()
-            for diff in  diff_list :
-                c.execute('UPDATE img_trans_imageupload SET "Username_id" ="{}" WHERE id = "{}";'.format(request.user.email , diff))
-            con.commit()
-            con.close()
+    
 
 
     #queryset = ImageUpload.objects.filter(Username_id = {request.user.email})#自分のファイルのみ抽出
@@ -59,18 +59,21 @@ def mypage(request):
     queryset = ImageUpload.objects.all()
     
     for query in queryset:
-        if query.Username_id == request.user.email:
+        if query.email == request.user.email:
              queryset_temp.append(query)
-    print(queryset_temp)
-    paginator = Paginator( queryset_temp, EXTRA )
+ 
+    #print(queryset_temp)
+    # paginator = Paginator( queryset_temp, EXTRA )
+    paginator = Paginator( queryset_temp, 20 )
+
     p = request.GET.get('page')
     files = paginator.get_page(p)
 
     context = {
         'files':  files,
         'form': formset,
-        'number_list': list(range(EXTRA)),
-        'total_number': EXTRA,
+        'number_list': list(range(20)),
+        'total_number': 20,
     }
 
     return render(request, 'img_trans/mypage.html',context)
@@ -83,12 +86,28 @@ def process(request,pk):
         if not os.path.exists(output_dir):    # ディレクトリが存在しない場合、ディレクトリを作成する
             os.makedirs(output_dir)
 
-        image = ImageUpload.objects.get(pk=pk).process(pk) 
-        main("eval",pk,"candy","process06")
-        main("eval",pk,"mosaic","process07")
-        main("eval",pk,"rain_princess","process08")
-        main("eval",pk,"udnie","process09")
+        image = ImageUpload.objects.get(pk=pk).process(pk)
+        db = ImageUpload.objects.get(pk=pk) 
 
+        main("eval",pk,"candy","process06",db.files)
+        output_path_relative =  str(settings.MEDIA_URL)+"images/{:04}".format(pk)+ "/" +"process06.jpg"
+        db.process06 =  output_path_relative
+        main("eval",pk,"mosaic","process07",db.files)
+        output_path_relative =  str(settings.MEDIA_URL)+"images/{:04}".format(pk)+ "/" +"process07.jpg"
+        db.process07 =  output_path_relative
+        main("eval",pk,"rain_princess","process09",db.files)
+        output_path_relative =  str(settings.MEDIA_URL)+"images/{:04}".format(pk)+ "/" +"process08.jpg"
+        db.process08 =  output_path_relative
+        main("eval",pk,"udnie","process09",db.files)
+        output_path_relative =  str(settings.MEDIA_URL)+"images/{:04}".format(pk)+ "/" +"process09.jpg"
+        db.process09 =  output_path_relative
+
+
+
+        # main("eval",pk,"mosaic","process07")
+        # main("eval",pk,"rain_princess","process08")
+        # main("eval",pk,"udnie","process09")
+        db.save()
         # for i in range(10):
         #     print('Start of iteration', i)
         #     start_time = time.time()

@@ -24,7 +24,7 @@ def load_image_style(filename, size=None, scale=None,max_style_size=1024):
         img = img[:, :, [2, 1, 0, 3]]
     img = Image.fromarray(img)
 
-    print(img.size)
+    
     # if img.size[0] < img.size[1]:
     #     img = img.rotate(-90)
         

@@ -138,12 +138,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
-#STATIC_ROOT = STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
 STATICFILES_DIRS = [ BASE_DIR / 'static']
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+# STATIC_ROOT = '/usr/share/nginx/html/static'
+# MEDIA_ROOT = '/usr/share/nginx/html/media'
 
 #STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 # Default primary key field type
