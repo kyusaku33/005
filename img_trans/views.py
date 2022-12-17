@@ -8,7 +8,7 @@ from django import forms
 from .forms import SingleUploadModelForm #, ImgForm
 from .models import ImageUpload#,Process
 import cv2
-import sqlite3
+#import sqlite3
 import os
 import json
 from django.contrib.auth.decorators import login_required

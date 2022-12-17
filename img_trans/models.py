@@ -6,7 +6,7 @@ from PIL import Image
 import io, base64
 from django.conf import settings
 import cv2,copy
-import sqlite3
+#import sqlite3
 from django.contrib.auth.models import User
 from img_trans.image import changedH
 
