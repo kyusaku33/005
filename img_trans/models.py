@@ -28,7 +28,7 @@ os.environ["CUDA_VISIBLE_DEVICES"]="-1"
 class ImageUpload(models.Model):
     files = models.ImageField( upload_to="images", null=True, blank=True, default='')
     Username = models.ForeignKey(User,on_delete=models.CASCADE, null=True,blank=True)
-    email = models.CharField(  verbose_name='', blank=True, null=True,max_length=50,default='',)
+    #email = models.CharField(  verbose_name='', blank=True, null=True,max_length=50,default='',)
     process01 = models.CharField(verbose_name="process01",blank=True,null=True,default='',max_length=2000)
     process02 = models.CharField(verbose_name="process02",blank=True,null=True,default='',max_length=2000)
     process03 = models.CharField(verbose_name="process03",blank=True,null=True,default='',max_length=2000)

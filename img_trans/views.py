@@ -47,24 +47,25 @@ def mypage(request):
         if formset.is_valid():
             for data in formset:
                  test = data.save(commit=False)
-                 test.email = request.user.email 
+                 #test.email = request.user.email 
+                 test.Username = request.user
                  test.save()
                
             formset.save()
     
 
 
-    #queryset = ImageUpload.objects.filter(Username_id = {request.user.email})#自分のファイルのみ抽出
-    queryset_temp =[] 
-    queryset = ImageUpload.objects.all()
+    queryset = ImageUpload.objects.filter(Username = request.user)#自分のファイルのみ抽出
+    #queryset_temp =[] 
+    #queryset = ImageUpload.objects.all()
     
-    for query in queryset:
-        if query.email == request.user.email:
-             queryset_temp.append(query)
+    #for query in queryset:
+    #    if query.email == request.user.email:
+    #         queryset_temp.append(query)
  
     #print(queryset_temp)
     # paginator = Paginator( queryset_temp, EXTRA )
-    paginator = Paginator( queryset_temp, 20 )
+    paginator = Paginator( queryset, 20 )
 
     p = request.GET.get('page')
     files = paginator.get_page(p)
