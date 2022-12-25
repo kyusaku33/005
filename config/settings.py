@@ -63,6 +63,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
    # 'user_sessions.middleware.SessionMiddleware',  #追加
+    'img_trans.middleware.SimpleMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -204,3 +205,44 @@ ACCOUNT_FORMS = {
 }
 
 ACCOUNT_SESSION_REMEMBER = True
+
+
+import logging
+
+FILENAME = [ BASE_DIR / "logs/django.log"]
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "file": {
+            "class": "logging.handlers.RotatingFileHandler",
+            # "filename": BASE_DIR + "/logs/django.log",
+            # "filename": FILENAME,
+             "filename": "C:/Users/kyusa/Documents/konno/work/51_Portfolio/005/logs/django.log",
+
+            "formatter": "verbose",
+            "maxBytes": 1024 * 1024 * 1,
+            "backupCount": 5,
+        },
+    },
+    "formatters": {
+        "verbose": {
+            "format": "\t".join(
+                [
+                    "[%(levelname)s]",
+                    "%(asctime)s",
+                    "%(name)s.%(funcName)s:%(lineno)s",
+                    "%(message)s",
+                ]
+            )
+        },
+    },
+    "loggers": {
+        "file": {
+            "handlers": ["file"],
+            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
+            "propagate": True,
+        },
+    },
+}
