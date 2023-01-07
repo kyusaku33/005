@@ -24,3 +24,6 @@ def login(request):
     print("3--------------------",request.user.is_active)
     print("4--------------------",request.user.is_staff)
     return render(request, 'accounts/login2.html',context)
+
+
+

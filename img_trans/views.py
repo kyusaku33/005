@@ -33,10 +33,21 @@ from django.forms import BaseModelFormSet
 
 
 def top(request):
+    import logging
+
+    logging.basicConfig(level=logging.DEBUG, format='%(threadName)s: %(message)s')
+    logging.getLogger(__name__)
+
+    logging.info('Hello World!')
+
     form = "temp"
     context = {'form':form,  }
+    test = 1/0
 
     return render(request, 'img_trans/top.html',context)
+
+
+
 
 def mypage(request):
     EXTRA = 1
