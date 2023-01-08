@@ -41,7 +41,7 @@ for a {{ site_name }} account and sign in below:{% endblocktrans %}</p>
   <h1>{% trans "Login" %}</h1>
   <form class="login" method="POST" action="{% url 'account_login' %}">
     {% csrf_token %}
-    {{temp2}}
+
     メールアドレスを入力 
     <div class="container-input" >{{ form.login |add_class:"form-box" }}</div>
     

@@ -211,25 +211,74 @@ ACCOUNT_SESSION_REMEMBER = True
 
 import logging
 
-FILENAME = [ BASE_DIR / "logs/django.log"]
+# LOGGING = {
+#     "version": 1,
+#     "disable_existing_loggers": False,
+#     "handlers": {
+#         "file": {
+#             "class": "logging.handlers.RotatingFileHandler",
+#             "filename":  "{}/logs/django2.log".format(BASE_DIR),
+#             # "filename": FILENAME,
+#              #"filename": "C:/Users/kyusa/Documents/konno/work/51_Portfolio/005/logs/django.log",
+
+#             "formatter": "verbose",
+#             "maxBytes": 1024 * 1024 * 1,
+#             "backupCount": 5,
+#         },
+#     },
+#     "formatters": {
+#         "verbose": {
+#             "format": "\t".join(
+#                 [
+#                     "[%(levelname)s]",
+#                     "%(asctime)s",
+#                     "%(name)s.%(funcName)s:%(lineno)s",
+#                     "%(message)s",
+#                 ]
+#             )
+#         },
+#     },
+#     "loggers": {
+#         "file": {
+#             "handlers": ["file"],
+#             "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
+#             "propagate": True,
+#         },
+#     },
+# }
 
 LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "handlers": {
-        "file": {
-            "class": "logging.handlers.RotatingFileHandler",
-            "filename":  "{}/logs/django.log".format(BASE_DIR),
-            # "filename": FILENAME,
-             #"filename": "C:/Users/kyusa/Documents/konno/work/51_Portfolio/005/logs/django.log",
+    'version': 1,
+    'disable_exiting_loggers': False,
 
-            "formatter": "verbose",
-            "maxBytes": 1024 * 1024 * 1,
-            "backupCount": 5,
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        # アプリケーションが利用するロガー
+        'img_trans': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
         },
     },
+
+
+    # 'formatters': {
+    #     'prod': {
+    #         'format': '\t'.join([
+    #             '%(asctime)s',
+    #             '[%(levelname)s]',
+    #             '%(pathtime)s(Line:%(lineno)d)',
+    #             '%(messsage)s'
+    #         ])
+    #     },
+    # },
+
+
     "formatters": {
-        "verbose": {
+        "prod": {
             "format": "\t".join(
                 [
                     "[%(levelname)s]",
@@ -240,11 +289,20 @@ LOGGING = {
             )
         },
     },
-    "loggers": {
-        "file": {
-            "handlers": ["file"],
-            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
-            "propagate": True,
+
+
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+#            'filename': os.path.join(BASE_DIR, 'logs/django3.log'),
+             "filename":  "{}/logs/django.log".format(BASE_DIR),
+            'formatter': 'prod',
+            'when': 'D',  # ログローテーション(新しいファイルへの切り替え)間隔の単位(D=日)
+            'interval': 1,  # ログローテーション間隔(1日単位)
+            'backupCount': 7,  # 保存しておくログファイル数
         },
     },
+
+
 }

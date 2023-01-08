@@ -38,11 +38,12 @@ def top(request):
     logging.basicConfig(level=logging.DEBUG, format='%(threadName)s: %(message)s')
     logging.getLogger(__name__)
 
-    logging.info('Hello World!')
+    # logging.info('Hello World!')
+    # logging.debug('Hello World!')
 
     form = "temp"
     context = {'form':form,  }
-    test = 1/0
+
 
     return render(request, 'img_trans/top.html',context)
 
