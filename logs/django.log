@@ -6651,3 +6651,4 @@
 [DEBUG]	2023-01-08 18:13:20,568	django.utils.autoreload.tick:394	File C:\Users\kyusa\Documents\konno\work\51_Portfolio\005\accounts\forms.py first seen with mtime 1668946485.1490805
 [DEBUG]	2023-01-08 18:13:20,576	django.utils.autoreload.tick:394	File C:\Users\kyusa\Documents\konno\work\51_Portfolio\005\venv\Lib\site-packages\django\contrib\messages\storage\session.py first seen with mtime 1665793714.755762
 [DEBUG]	2023-01-08 18:13:20,581	django.utils.autoreload.tick:394	File C:\Users\kyusa\Documents\konno\work\51_Portfolio\005\venv\Lib\site-packages\django\contrib\messages\storage\fallback.py first seen with mtime 1665793714.7547624
+[INFO]	2023-01-08 18:13:21,314	django.server.log_message:187	"GET / HTTP/1.1" 200 2490
